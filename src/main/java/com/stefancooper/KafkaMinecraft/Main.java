@@ -1,10 +1,14 @@
 package com.stefancooper.KafkaMinecraft;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,7 +17,7 @@ import java.util.*;
 
 public class Main extends JavaPlugin implements Listener {
 
-    private ArrayList<Doorbell> doorbells = new ArrayList<>(Arrays.asList());
+    private Map<Block, Doorbell> doorbells = new HashMap<>();
     private Produce kafkaProducer;
 
     public void onEnable() { // This is called when the plugin is loaded into the server.
@@ -29,13 +33,11 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("addDoorbell")) {
-            doorbells.add(new Doorbell(
-                    sender.getName(),
-                    new Location(Bukkit.getWorld("world"),
-                            Double.parseDouble(args[0]),
-                            Double.parseDouble(args[1]),
-                            Double.parseDouble(args[2])
-                    ), false));
+            Location location = new Location(Bukkit.getWorld("world"),
+                    Double.parseDouble(args[0]),
+                    Double.parseDouble(args[1]),
+                    Double.parseDouble(args[2]));
+            doorbells.put(location.getBlock(), new Doorbell(sender.getName(), location, false));
         }
         return true;
     }
@@ -47,7 +49,9 @@ public class Main extends JavaPlugin implements Listener {
             int currentY = e.getTo().getBlockY();
             int currentZ = e.getTo().getBlockZ();
 
-            for (Doorbell doorbell : doorbells) {
+            Collection<Doorbell> doorbellLocations = doorbells.values();
+
+            for (Doorbell doorbell : doorbellLocations) {
                 int getXMinRange = doorbell.getLocation().getBlockX() - 4;
                 int getXMaxRange = doorbell.getLocation().getBlockX() + 4;
                 int getYMinRange = doorbell.getLocation().getBlockY() - 4;
@@ -70,6 +74,27 @@ public class Main extends JavaPlugin implements Listener {
                         }
                     }, calculateSeconds(10));
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void placeDoorbell(BlockPlaceEvent e) {
+        if (e.getBlockPlaced().getType().equals(Material.STONE_BUTTON)) {
+            if (e.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("doorbell")) {
+                doorbells.put(e.getBlockPlaced(), new Doorbell(
+                        e.getPlayer().getDisplayName(),
+                        e.getBlockPlaced().getLocation(),
+                        false));
+            }
+        }
+    }
+
+    @EventHandler
+    public void pressDoorbell(PlayerInteractEvent e) {
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.STONE_BUTTON)) {
+            if (doorbells.get(e.getClickedBlock()) != null) {
+                kafkaProducer.produceMessage("ring", "\uD83D\uDD14 Doorbell pressed! " + e.getPlayer().getDisplayName() + " is at the door!\n" + new Date().toGMTString() + "\n" + doorbells.get(e.getClickedBlock()).getID());
             }
         }
     }
