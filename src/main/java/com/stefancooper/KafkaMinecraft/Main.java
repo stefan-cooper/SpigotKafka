@@ -13,11 +13,11 @@ import java.util.*;
 public class Main extends JavaPlugin implements Listener {
 
     private ArrayList<Doorbell> doorbells = new ArrayList<>(Arrays.asList());
-    private Produce kafkaProducer = new Produce();
+    private Produce kafkaProducer;
 
     public void onEnable() { // This is called when the plugin is loaded into the server.
 
-
+        kafkaProducer = new Produce();
         this.getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -60,7 +60,7 @@ public class Main extends JavaPlugin implements Listener {
                         (currentZ >= getZMinRange && currentZ <= getZMaxRange)) {
                     Bukkit.getConsoleSender().sendMessage(doorbell.getID() + ": Motion Detected! Not detecting motion for 5 seconds...");
                     doorbell.setMotionDetected(true);
-                    kafkaProducer.produceMessage("motion", "Motion Detected! " + e.getPlayer().getDisplayName() + " is nearby!");
+                    kafkaProducer.produceMessage("motion", "Motion Detected! " + e.getPlayer().getDisplayName() + " is nearby! \n" + new Date().toGMTString());
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                         @Override
