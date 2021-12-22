@@ -18,7 +18,8 @@ const App = () => {
   }, [])
 
   const getNotifications = () => {
-    axios.get(`http://localhost:3001/api/kafka_poll`).then(res => updateNotifications(res.data))
+    axios.get(`http://localhost:3001/api/kafka_motion`).then(res => updateNotifications(res.data))
+    axios.get(`http://localhost:3001/api/kafka_login`).then(res => updateNotifications(res.data))
   }
 
   return (

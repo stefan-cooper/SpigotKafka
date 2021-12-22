@@ -8,14 +8,26 @@ const kafka = new Kafka({
 })
 
 const consumer = kafka.consumer({ groupId: Math.random().toString() })
-let notifs = []
+let motionNotifs = []
+let loginNotifs = []
 consumer.connect()
 consumer.subscribe({ topic: 'motion' })
-consumer.run({ eachMessage: async ({ topic, partition, message }) => { notifs.push(message.value.toString()); return true } })
+consumer.subscribe({ topic: 'login' })
+consumer.run({ eachMessage: async ({ topic, partition, message }) => { 
+  console.log(topic)
+  if (topic === 'motion') motionNotifs.push(message.value.toString()); 
+  else if (topic === 'login') loginNotifs.push(message.value.toString()); 
+  return true } 
+})
 
-router.get("/kafka_poll", (req, res) => {
-  res.json(notifs)
-  notifs = []
+router.get("/kafka_motion", (req, res) => {
+  res.json(motionNotifs)
+  motionNotifs = []
+});
+
+router.get("/kafka_login", (req, res) => {
+  res.json(loginNotifs)
+  loginNotifs = []
 });
 
 module.exports = router;

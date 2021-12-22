@@ -10,6 +10,21 @@ commands:
     usage: /addDoorbell xCoordinate yCoordinate zCoordinate
 
 
+# TODO:
+# Doorbells:
+#   Add physical doorbell that sends kafka events on press (wooden button named 'Doorbell')
+#   Process more information about the event
+#     - Which block motion is detected
+#     - Non Player motion (mobs)
+#   Do something with the kafka events in React
+#     - Send mobile notifications
+#     - Send email notifications
+# Other:
+#   Subscribe (and produce) to other events in Minecraft
+#     - When a player joins the server
+#     - When a player dies
+
+
 
 
 

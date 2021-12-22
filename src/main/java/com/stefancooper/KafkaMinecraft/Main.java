@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,7 +61,7 @@ public class Main extends JavaPlugin implements Listener {
                         (currentZ >= getZMinRange && currentZ <= getZMaxRange)) {
                     Bukkit.getConsoleSender().sendMessage(doorbell.getID() + ": Motion Detected! Not detecting motion for 5 seconds...");
                     doorbell.setMotionDetected(true);
-                    kafkaProducer.produceMessage("motion", "Motion Detected! " + e.getPlayer().getDisplayName() + " is nearby! \n" + new Date().toGMTString());
+                    kafkaProducer.produceMessage("motion", "\uD83C\uDFC3 Motion Detected! " + e.getPlayer().getDisplayName() + " is nearby! \n" + new Date().toGMTString());
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                         @Override
@@ -71,6 +72,11 @@ public class Main extends JavaPlugin implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void notifyLogin(PlayerLoginEvent e) {
+        kafkaProducer.produceMessage("login", "\uD83D\uDD17 Player connected: " + e.getPlayer().getDisplayName() + "\n" + new Date().toGMTString());
     }
 
     public static void setTimeout(Runnable runnable, int delay){
