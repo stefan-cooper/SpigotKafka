@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <build>
-        <directory>C://Users//theem//Downloads//Minecraft//Stefans_Server//plugins</directory>
+        <directory>${env.PLUGIN_LOCATION}</directory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

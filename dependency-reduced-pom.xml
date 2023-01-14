@@ -5,7 +5,7 @@
   <artifactId>KafkaMinecraft</artifactId>
   <version>0.0.1</version>
   <build>
-    <directory>C://Users//theem//Downloads//Minecraft//Stefans_Server//plugins</directory>
+    <directory>${env.PLUGIN_LOCATION}</directory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
