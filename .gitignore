@@ -1,5 +1,10 @@
 .idea/
 target/
 
-react/node_modules/
-node_modules/
+node_modules
+
+# spigot
+
+server
+bundler
+build
