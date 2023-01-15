@@ -1,5 +1,6 @@
 package com.stefancooper.KafkaMinecraft;
 
+import com.google.gson.JsonObject;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -8,9 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -101,7 +101,43 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void notifyLogin(PlayerLoginEvent e) {
-        kafkaProducer.produceMessage("login", "\uD83D\uDD17 Player connected: " + e.getPlayer().getDisplayName() + "\n" + new Date().toGMTString());
+        JsonObject details = new JsonObject();
+        details.addProperty("id", UUID.randomUUID().toString());
+        details.addProperty("player", e.getPlayer().getDisplayName());
+        details.addProperty("time", new Date().toGMTString());
+        // TODO - produce this as a JSON
+        kafkaProducer.produceMessage("login", details.toString());
+    }
+
+    @EventHandler
+    public void notifyDisconnect(PlayerQuitEvent e) {
+        JsonObject details = new JsonObject();
+        details.addProperty("id", UUID.randomUUID().toString());
+        details.addProperty("player", e.getPlayer().getDisplayName());
+        details.addProperty("time", new Date().toGMTString());
+        // TODO - produce this as a JSON
+        kafkaProducer.produceMessage("disconnect", details.toString());
+    }
+
+    @EventHandler
+    public void notifyDeath(PlayerDeathEvent e) {
+        JsonObject details = new JsonObject();
+        details.addProperty("id", UUID.randomUUID().toString());
+        details.addProperty("player", e.getEntity().getPlayer().getDisplayName());
+        details.addProperty("time", new Date().toGMTString());
+        // TODO - produce this as a JSON
+        kafkaProducer.produceMessage("death", details.toString());
+    }
+
+    @EventHandler
+    public void notifyChatMessage(AsyncPlayerChatEvent e) {
+        JsonObject details = new JsonObject();
+        details.addProperty("id", UUID.randomUUID().toString());
+        details.addProperty("player", e.getPlayer().getDisplayName());
+        details.addProperty("message", e.getMessage());
+        details.addProperty("time", new Date().toGMTString());
+        // TODO - produce this as a JSON
+        kafkaProducer.produceMessage("chat", details.toString());
     }
 
     public static void setTimeout(Runnable runnable, int delay){
