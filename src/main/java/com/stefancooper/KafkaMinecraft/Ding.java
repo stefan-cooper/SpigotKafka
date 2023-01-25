@@ -1,6 +1,5 @@
 package com.stefancooper.KafkaMinecraft;
 
-import com.google.gson.JsonObject;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -9,25 +8,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
-public class Main extends JavaPlugin implements Listener {
+public class Ding implements Listener {
 
     private Map<Block, Doorbell> doorbells = new HashMap<>();
     private Produce kafkaProducer;
+    private JavaPlugin plugin;
 
-    public void onEnable() { // This is called when the plugin is loaded into the server.
-
-        kafkaProducer = new Produce();
-        this.getServer().getPluginManager().registerEvents(this, this);
-    }
-
-    public void onDisable() { // This is called when the plugin is unloaded from the server.
-
+    public Ding(Produce kafkaProducer, JavaPlugin plugin) {
+        this.kafkaProducer = kafkaProducer;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -67,7 +61,7 @@ public class Main extends JavaPlugin implements Listener {
                     doorbell.setMotionDetected(true);
                     kafkaProducer.produceMessage("motion", "\uD83C\uDFC3 Motion Detected! " + e.getPlayer().getDisplayName() + " is nearby! \n" + new Date().toGMTString());
 
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                         @Override
                         public void run() {
                             doorbell.setMotionDetected(false);
@@ -97,59 +91,6 @@ public class Main extends JavaPlugin implements Listener {
                 kafkaProducer.produceMessage("ring", "\uD83D\uDD14 Doorbell pressed! " + e.getPlayer().getDisplayName() + " is at the door!\n" + new Date().toGMTString() + "\n" + doorbells.get(e.getClickedBlock()).getID());
             }
         }
-    }
-
-    @EventHandler
-    public void notifyLogin(PlayerLoginEvent e) {
-        JsonObject details = new JsonObject();
-        details.addProperty("id", UUID.randomUUID().toString());
-        details.addProperty("player", e.getPlayer().getDisplayName());
-        details.addProperty("time", new Date().toGMTString());
-        // TODO - produce this as a JSON
-        kafkaProducer.produceMessage("login", details.toString());
-    }
-
-    @EventHandler
-    public void notifyDisconnect(PlayerQuitEvent e) {
-        JsonObject details = new JsonObject();
-        details.addProperty("id", UUID.randomUUID().toString());
-        details.addProperty("player", e.getPlayer().getDisplayName());
-        details.addProperty("time", new Date().toGMTString());
-        // TODO - produce this as a JSON
-        kafkaProducer.produceMessage("disconnect", details.toString());
-    }
-
-    @EventHandler
-    public void notifyDeath(PlayerDeathEvent e) {
-        JsonObject details = new JsonObject();
-        details.addProperty("id", UUID.randomUUID().toString());
-        details.addProperty("player", e.getEntity().getPlayer().getDisplayName());
-        details.addProperty("time", new Date().toGMTString());
-        // TODO - produce this as a JSON
-        kafkaProducer.produceMessage("death", details.toString());
-    }
-
-    @EventHandler
-    public void notifyChatMessage(AsyncPlayerChatEvent e) {
-        JsonObject details = new JsonObject();
-        details.addProperty("id", UUID.randomUUID().toString());
-        details.addProperty("player", e.getPlayer().getDisplayName());
-        details.addProperty("message", e.getMessage());
-        details.addProperty("time", new Date().toGMTString());
-        // TODO - produce this as a JSON
-        kafkaProducer.produceMessage("chat", details.toString());
-    }
-
-    public static void setTimeout(Runnable runnable, int delay){
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            }
-            catch (Exception e){
-                System.err.println(e);
-            }
-        }).start();
     }
 
     private int calculateSeconds(int seconds) {

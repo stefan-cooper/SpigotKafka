@@ -1,7 +1,7 @@
 name: KafkaMinecraft
 version: 0.0.1
 author: Stefan Cooper
-main: com.stefancooper.KafkaMinecraft.Main
+main: com.stefancooper.KafkaMinecraft.Plugin
 api-version: 1.14
 website: https://stefancooper.com
 commands:
