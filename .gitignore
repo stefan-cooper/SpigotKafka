@@ -8,3 +8,7 @@ node_modules
 server
 bundler
 build
+
+null/
+${env.PLUGIN_LOCATION}
+*.iml
