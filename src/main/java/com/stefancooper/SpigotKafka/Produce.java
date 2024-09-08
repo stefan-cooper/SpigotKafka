@@ -1,4 +1,4 @@
-package com.stefancooper.KafkaMinecraft;
+package com.stefancooper.SpigotKafka;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -9,11 +9,11 @@ import java.util.UUID;
 
 public class Produce {
 
-    private Properties props = new Properties();
-    private KafkaProducer<String, String> producer;
+    private final KafkaProducer<String, String> producer;
 
     public Produce () {
         Thread.currentThread().setContextClassLoader(null);
+        final Properties props = new Properties();
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "Producer");
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
