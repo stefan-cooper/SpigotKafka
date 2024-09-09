@@ -6,11 +6,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Date;
 
-public class PlayerDeathMessage extends BaseMessage {
+public class PlayerDeath extends Base {
 
     final PlayerDeathEvent deathEvent;
 
-    public PlayerDeathMessage(Player player, Date time, PlayerDeathEvent deathEvent) {
+    public PlayerDeath(Player player, Date time, PlayerDeathEvent deathEvent) {
         super(player, time);
         this.deathEvent = deathEvent;
     }

@@ -6,11 +6,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Date;
 
-public class PlayerChatMessage extends BaseMessage {
+public class PlayerChat extends Base {
 
     final AsyncPlayerChatEvent chatEvent;
 
-    public PlayerChatMessage(Player player, Date time, AsyncPlayerChatEvent chatEvent) {
+    public PlayerChat(Player player, Date time, AsyncPlayerChatEvent chatEvent) {
         super(player, time);
         this.chatEvent = chatEvent;
     }

@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 import java.util.Date;
 import java.util.UUID;
 
-public class BaseMessage {
+public class Base {
 
     private final String id;
     private final Player player;
     private final Date time;
 
-    public BaseMessage(final Player player, final Date time) {
+    public Base(final Player player, final Date time) {
         this.id = UUID.randomUUID().toString();
         this.player = player;
         this.time = time;
