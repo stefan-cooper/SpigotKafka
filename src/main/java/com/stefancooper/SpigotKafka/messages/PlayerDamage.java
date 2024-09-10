@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import com.stefancooper.SpigotKafka.resources.Type;
 
 import java.util.Date;
 
@@ -13,12 +14,12 @@ public class PlayerDamage extends Base {
     final EntityDamageEvent damageEvent;
 
     public PlayerDamage(Player player, Date time, EntityDamageEvent damageEvent) {
-        super(player, time);
+        super(player, time, Type.DAMAGE);
         this.damageEvent = damageEvent;
     }
 
-    Double getDamage() {
-        return damageEvent.getDamage();
+    int getDamage() {
+        return (int) damageEvent.getDamage();
     }
 
     String getDamageSource() {
@@ -33,11 +34,14 @@ public class PlayerDamage extends Base {
         }
     }
 
+    int getNewHealth() { return getPlayerHealth() - getDamage(); }
+
     @Override
     public JsonObject encodeToJson() {
         final JsonObject json = super.encodeToJson();
         json.addProperty("damage", getDamage());
         json.addProperty("damageSource", getDamageSource());
+        json.addProperty("health", getNewHealth());
         return json;
     }
 }

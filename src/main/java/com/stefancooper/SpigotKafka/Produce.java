@@ -22,6 +22,8 @@ public class Produce {
     }
 
     public void produceMessage(String topic, String produceContent) {
-        this.producer.send(new ProducerRecord<>(topic, UUID.randomUUID().toString(), produceContent));
+        final String id = UUID.randomUUID().toString();
+        this.producer.send(new ProducerRecord<>(topic, id, produceContent));
+        this.producer.send(new ProducerRecord<>("all", id, produceContent));
     }
 }

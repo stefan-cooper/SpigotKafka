@@ -7,7 +7,7 @@ export MAVEN_HOME=./server/apache-maven-3.9.6
 export PATH=${PATH}:${MAVEN_HOME}/bin
 
 # if you are seeing mvn not found, set this
-#export JAVA_HOME=/c/Program\ Files/Java/jdk-21/bin
+export JAVA_HOME=/c/Program\ Files/Java/jdk-21
 
 REFRESH_BUILD=${REFRESH_BUILD:-false}
 MINECRAFT_VERSION=${MINECRAFT_VERSION:-1.21.1}
