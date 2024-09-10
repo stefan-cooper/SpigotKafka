@@ -5,7 +5,6 @@ import com.stefancooper.SpigotKafka.messages.PlayerDamage;
 import com.stefancooper.SpigotKafka.messages.PlayerChat;
 import com.stefancooper.SpigotKafka.messages.PlayerDeath;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,7 +45,7 @@ public class Core implements Listener {
     @EventHandler
     public void chatMessage(AsyncPlayerChatEvent e) {
         PlayerChat message = new PlayerChat(e.getPlayer(), new Date(), e);
-        kafkaProducer.produceMessage("death", message.encodeToJson().toString());
+        kafkaProducer.produceMessage("chat", message.encodeToJson().toString());
     }
 
     @EventHandler

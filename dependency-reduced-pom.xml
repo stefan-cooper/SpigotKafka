@@ -52,6 +52,10 @@
           <groupId>com.google.code.gson</groupId>
         </exclusion>
         <exclusion>
+          <artifactId>joml</artifactId>
+          <groupId>org.joml</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>bungeecord-chat</artifactId>
           <groupId>net.md-5</groupId>
         </exclusion>

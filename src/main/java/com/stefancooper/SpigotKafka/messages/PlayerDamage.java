@@ -23,7 +23,9 @@ public class PlayerDamage extends Base {
 
     String getDamageSource() {
         Entity damager = damageEvent.getDamageSource().getCausingEntity();
-        if (damager instanceof HumanEntity) {
+        if (damager == null) {
+          return "unknown";
+        } else if (damager instanceof HumanEntity) {
             HumanEntity humanDamager = (HumanEntity) damager;
             return humanDamager.getName();
         } else {
@@ -36,6 +38,6 @@ public class PlayerDamage extends Base {
         final JsonObject json = super.encodeToJson();
         json.addProperty("damage", getDamage());
         json.addProperty("damageSource", getDamageSource());
-        return super.encodeToJson();
+        return json;
     }
 }

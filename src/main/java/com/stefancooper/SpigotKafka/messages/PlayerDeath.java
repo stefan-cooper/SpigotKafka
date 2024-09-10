@@ -23,6 +23,6 @@ public class PlayerDeath extends Base {
     public JsonObject encodeToJson() {
         final JsonObject json = super.encodeToJson();
         json.addProperty("reason", getDeathMessage());
-        return super.encodeToJson();
+        return json;
     }
 }

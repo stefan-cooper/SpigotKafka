@@ -23,6 +23,6 @@ public class PlayerChat extends Base {
     public JsonObject encodeToJson() {
         final JsonObject json = super.encodeToJson();
         json.addProperty("message", getChatMessage());
-        return super.encodeToJson();
+        return json;
     }
 }

@@ -1,13 +1,13 @@
-name: KafkaMinecraft
+name: SpigotKafka
 version: 0.0.1
 author: Stefan Cooper
-main: com.stefancooper.KafkaMinecraft.Plugin
+main: com.stefancooper.SpigotKafka.Plugin
 api-version: 1.14
 website: https://stefancooper.com
-commands:
-  AddDoorbell:
-    description: Add doorbell to coordinates to get motion notifications
-    usage: /addDoorbell xCoordinate yCoordinate zCoordinate
+#commands:
+#  AddDoorbell:
+#    description: Add doorbell to coordinates to get motion notifications
+#    usage: /addDoorbell xCoordinate yCoordinate zCoordinate
 
 
 # TODO:
