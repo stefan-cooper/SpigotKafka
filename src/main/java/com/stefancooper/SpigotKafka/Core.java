@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 
 import java.util.*;
@@ -61,6 +62,12 @@ public class Core implements Listener {
     public void chatMessage(AsyncPlayerChatEvent e) {
         PlayerChat message = new PlayerChat(e.getPlayer(), new Date(), e);
         kafkaProducer.produceMessage("chat", message.encodeToJson().toString());
+    }
+
+    @EventHandler
+    public void inventoryClose(InventoryCloseEvent e) {
+        Base message = new Base((Player) e.getPlayer(), new Date(), Type.INVENTORY);
+        kafkaProducer.produceMessage("inventory", message.encodeToJson().toString());
     }
 
     @EventHandler

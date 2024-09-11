@@ -7,7 +7,8 @@ public enum Type {
     RESPAWN("respawn"),
     REGEN("regen"),
     CHAT("chat"),
-    DAMAGE("damage");
+    DAMAGE("damage"),
+    INVENTORY("inventory");
 
     public final String label;
 
